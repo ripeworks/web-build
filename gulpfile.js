@@ -12,6 +12,7 @@ var uglify      = require("gulp-uglify")
 var sourcemaps  = require("gulp-sourcemaps")
 var reload      = browserSync.reload
 var path        = require("path")
+var assign      = require("object-assign")
 
 var coffeeify   = require("coffeeify")
 var stylus      = require("gulp-stylus")
@@ -94,13 +95,14 @@ gulp.task('styles', function() {
     .pipe(reload({stream: true}))
 })
 
-gulp.task('uglify', function() {
+gulp.task('uglify', function(done) {
+  if (!watch) return done()
   gulp.src(path.join(config.paths.dest, config.paths.scripts, '**/*.js'))
     .pipe(uglify())
     .pipe(gulp.dest(config.paths.dest))
 })
 
-gulp.task('build', ['scripts', 'styles', config.watch ? 'uglify'])
+gulp.task('build', ['scripts', 'styles', 'uglify'])
 
 gulp.task('nodemon', function(done) {
   var called = false
@@ -153,3 +155,7 @@ gulp.task('watch', ['set-watch', config.server ? 'browser-sync-nodemon' : 'brows
 
 // gulp.task('production', ['build', 'uglify'])
 gulp.task('default', ['watch'])
+
+module.exports = function(c) {
+  config = assign(config, c)
+}
