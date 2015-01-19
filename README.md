@@ -1,17 +1,16 @@
-# Gulp tooling for building/watching web projects
+# Gulp tooling for web projects
 
-Using the following:
+Configurable gulp tooling with sane conventions.
+
+Includes the following:
 
 * browserify + watchify
 * browserSync
-
-Features:
-
-* Coffeescript
-* Stylus
-* Sourcemaps
-* Production builds
-* Watch with browserSync + custom server
+* coffeescript
+* stylus
+* sourcemaps
+* production builds
+* custom server
 
 ## Usage
 
@@ -20,7 +19,8 @@ Features:
 * Configure and require:
 
 ```js
-require('web-build')({
+var gulp = require('gulp')
+var options = {
   scripts: ['app/app.js', 'server/server.js'],
   styles: ['styles/application.styl'],
   server: {
@@ -28,7 +28,15 @@ require('web-build')({
     port: 3001,
     watch: ['server']
   }
-})
+}
+
+require('web-build')(gulp, options)
 ```
 
 * Use gulp (`gulp watch`, `gulp build`)
+
+## Options
+
+| option | description | default |
+|--------|-------------|---------|
+| TODO |
