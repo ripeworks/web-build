@@ -14,7 +14,7 @@ Includes the following:
 
 ## Usage
 
-* `npm install --save web-build`
+* `npm install --save-dev web-build gulp`
 * Create a gulpfile for your project
 * Configure and require:
 
