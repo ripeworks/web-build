@@ -22,7 +22,10 @@ Includes the following:
 var gulp = require('gulp')
 var options = {
   scripts: ['app/app.js', 'server/server.js'],
-  styles: ['styles/application.styl'],
+  styles: {
+    src: ['styles/application.styl'],
+    watch: 'styles'
+  },
   server: {
     path: 'server/server.js',
     port: 3001,
