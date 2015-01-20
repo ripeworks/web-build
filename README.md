@@ -43,15 +43,10 @@ require('web-build')(gulp, options)
 | option | description | default |
 |--------|-------------|---------|
 | scripts | Array of scripts to compile. | `[]` |
-| styles  | Object including `src` array of stylesheets to build and an optional
-`watch` directory to watch for changes. | `{}` |
-| server | Object including `path` string to server script, `port` to listen on,
-`watch` array of directories to watch for changes. _Port must be different from
-main port option because a proxy is used with BrowserSync. | `false` |
+| styles  | Object including `src` array of stylesheets to build and an optional `watch` directory to watch for changes. | `{}` |
+| server | Object including `path` string to server script, `port` to listen on, `watch` array of directories to watch for changes. _Port must be different from main port option because a proxy is used with BrowserSync. | `false` |
 | port | Port to listen on. | 3000 |
-| paths | Object including `dest` string to build destination, `scripts` string
-to scripts destination, `styles` string to stylesheets destination. | `{dest:
-'public', scripts: 'js', styles: 'css'}` |
+| paths | Object including `dest` string to build destination, `scripts` string to scripts destination, `styles` string to stylesheets destination. | `{dest: 'public', scripts: 'js', styles: 'css'}` |
 
 ## Roadmap
 
