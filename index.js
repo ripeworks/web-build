@@ -76,6 +76,9 @@ module.exports = function(gulp, options) {
 
       b.on('update', rebundle)
       b.transform(coffeeify)
+      if (config.onBundle) {
+        config.onBundle(b);
+      }
       rebundle()
     }
 
