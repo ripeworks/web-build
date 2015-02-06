@@ -31,7 +31,8 @@ var defaults = {
     dest: 'public',
     scripts: 'js',
     styles: 'css'
-  }
+  },
+  browserify: {}
 }
 
 var watch = false
@@ -40,12 +41,12 @@ module.exports = function(gulp, options) {
   var config = assign(defaults, options)
 
   gulp.task('scripts', function(done) {
-    var browserifyConfig = {
+    var browserifyConfig = assign({
       extensions: [".coffee"],
       cache: {},
       packageCache: {},
       fullPaths: true
-    }
+    }, config.browserify);
 
     var queue = config.scripts.length || 1
 
