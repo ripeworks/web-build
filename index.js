@@ -98,7 +98,7 @@ module.exports = function(gulp, options) {
       .pipe(reload({stream: true}))
   })
 
-  gulp.task('uglify', function(done) {
+  gulp.task('uglify', ['scripts'], function(done) {
     gulp.src(path.join(config.paths.dest, config.paths.scripts, '**/*.js'))
       .pipe(uglify())
       .pipe(gulp.dest(path.join(config.paths.dest, config.paths.scripts)))
