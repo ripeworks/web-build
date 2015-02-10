@@ -108,7 +108,7 @@ module.exports = function(gulp, options) {
     var called = false
     var ext = config.server.extensions.join(" ") || 'js coffee'
 
-    nodemon({script: config.server.path, watch: config.server.watch, ext: ext})
+    nodemon({script: config.server.path, monitor: config.server.watch, ext: ext})
       .on('start', function() {
         if (!called) done()
         called = true
