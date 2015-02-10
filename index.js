@@ -106,9 +106,13 @@ module.exports = function(gulp, options) {
 
   gulp.task('nodemon', function(done) {
     var called = false
-    var ext = config.server.extensions.join(" ") || 'js coffee'
+    var nodemonConfig = {
+      watch: config.server.watch,
+      ext: config.server.extensions.join(" ") || 'js coffee'
+    }
+    if (config.server.path) nodemonConfig.script = config.server.path;
 
-    nodemon({script: config.server.path, monitor: config.server.watch, ext: ext})
+    nodemon(nodemonConfig)
       .on('start', function() {
         if (!called) done()
         called = true
