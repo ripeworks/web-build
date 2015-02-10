@@ -43,6 +43,7 @@ module.exports = function(gulp, options) {
   gulp.task('scripts', function(done) {
     var browserifyConfig = assign({
       extensions: [".coffee"],
+      debug: watch,
       cache: {},
       packageCache: {},
       fullPaths: true
