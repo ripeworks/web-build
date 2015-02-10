@@ -72,7 +72,7 @@ module.exports = function(gulp, options) {
           .pipe(rename({extname: ".js"}))
           .pipe(gulp.dest(path.join(config.paths.dest, config.paths.scripts)))
           .on('end', handleComplete)
-          // .pipe(reload({stream: true}))
+          .pipe(reload({stream: true}))
       }
 
       b.on('update', rebundle)
@@ -95,13 +95,13 @@ module.exports = function(gulp, options) {
       }))
       .pipe(sourcemaps.write())
       .pipe(gulp.dest(path.join(config.paths.dest, config.paths.styles)))
-      // .pipe(reload({stream: true}))
+      .pipe(reload({stream: true}))
   })
 
   gulp.task('uglify', function(done) {
     gulp.src(path.join(config.paths.dest, config.paths.scripts, '**/*.js'))
       .pipe(uglify())
-      .pipe(gulp.dest(config.paths.dest))
+      .pipe(gulp.dest(path.join(config.paths.dest, config.paths.scripts)))
   })
 
   gulp.task('nodemon', function(done) {
@@ -126,7 +126,6 @@ module.exports = function(gulp, options) {
 
   gulp.task('browser-sync-nodemon', ['nodemon', 'build'], function() {
     browserSync.init({
-      files: [path.join(config.paths.dest, '**')],
       open: false,
       port: config.port,
       proxy: "localhost:" + config.server.port,
@@ -138,7 +137,6 @@ module.exports = function(gulp, options) {
 
   gulp.task('browser-sync', ['build'], function() {
     browserSync({
-      files: [path.join(config.paths.dest, '**')],
       open: false,
       port: config.port,
       server: {
