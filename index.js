@@ -105,10 +105,9 @@ module.exports = function(gulp, options) {
 
   gulp.task('nodemon', function(done) {
     var called = false
-    // var watchPaths = config.server.path.concat(config.server.watch.map(function(p) { path.join(p, '**/*.*') }))
-    // TODO: how to handle watching?
+    var ext = config.server.extensions.join(" ") || 'js coffee'
 
-    nodemon({script: config.server.path})
+    nodemon({script: config.server.path, watch: config.server.watch, ext: ext})
       .on('start', function() {
         if (!called) done()
         called = true
@@ -116,7 +115,7 @@ module.exports = function(gulp, options) {
       .on('restart', function() {
         setTimeout(function() {
           reload({stream: false})
-        }, 1000)
+        }, config.server.timeout || 1000)
       })
   })
 
