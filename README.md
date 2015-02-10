@@ -29,6 +29,8 @@ var options = {
   server: {
     path: 'server/server.js',
     port: 3001,
+    timeout: 2000,
+    extensions: ['js', 'jade'],
     watch: ['server']
   }
 }

@@ -115,7 +115,7 @@ module.exports = function(gulp, options) {
       .on('restart', function() {
         setTimeout(function() {
           reload({stream: false})
-        }, config.server.timeout || 1000)
+        }, config.server.timeout || 2000)
       })
   })
 
