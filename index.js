@@ -106,9 +106,10 @@ module.exports = function(gulp, options) {
 
   gulp.task('nodemon', function(done) {
     var called = false
+    var ext = ['js', 'coffee']
     var nodemonConfig = {
       watch: config.server.watch,
-      ext: config.server.extensions.join(" ") || 'js coffee'
+      ext: (config.server.extensions ? ext.concat(config.server.extensions) : ext).join(" ")
     }
     if (config.server.path) nodemonConfig.script = config.server.path;
 
@@ -150,6 +151,7 @@ module.exports = function(gulp, options) {
   })
 
   gulp.task('set-watch', function() { watch = true })
+  gulp.task('set-production', function() { process.env.NODE_ENV = 'production' })
 
   gulp.task('watch', ['set-watch', config.server ? 'browser-sync-nodemon' : 'browser-sync'], function() {
     if (config.styles.watch) {
@@ -157,7 +159,7 @@ module.exports = function(gulp, options) {
     }
   })
 
-  gulp.task('production', ['build', 'uglify'])
+  gulp.task('production', ['set-production', 'build', 'uglify'])
   gulp.task('build', ['scripts', 'styles'])
   gulp.task('default', ['watch'])
 }
