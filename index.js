@@ -66,7 +66,6 @@ module.exports = function(gulp, options) {
       var b = browserify(script, browserifyConfig)
       if (watch) b = watchify(b)
       var rebundle = function() {
-        config.onBundle && config.onBundle(b)
         b.bundle()
           .on('error', handleError)
           .pipe(source(path.basename(script)))
@@ -76,6 +75,7 @@ module.exports = function(gulp, options) {
           .pipe(reload({stream: true}))
       }
 
+      config.onBundle && config.onBundle(b)
       b.on('update', rebundle)
       b.transform(coffeeify)
       rebundle()
