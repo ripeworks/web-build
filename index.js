@@ -8,6 +8,7 @@ var gutil       = require("gulp-util")
 var nodemon     = require("gulp-nodemon")
 var rename      = require("gulp-rename")
 var uglify      = require("gulp-uglify")
+var minify      = require("gulp-minify-css")
 var sourcemaps  = require("gulp-sourcemaps")
 var reload      = browserSync.reload
 var path        = require("path")
@@ -102,6 +103,12 @@ module.exports = function(gulp, options) {
       .pipe(gulp.dest(path.join(config.paths.dest, config.paths.scripts)))
   })
 
+  gulp.task('minify', ['styles'], function(done) {
+    gulp.src(path.join(config.paths.dest, config.paths.styles, '**/*.css'))
+      .pipe(minify())
+      .pipe(gulp.dest(path.join(config.paths.dest, config.paths.styles)))
+  })
+
   gulp.task('nodemon', function(done) {
     var called = false
     var ext = ['js', 'coffee']
@@ -157,7 +164,7 @@ module.exports = function(gulp, options) {
     }
   })
 
-  gulp.task('production', ['set-production', 'build', 'uglify'])
+  gulp.task('production', ['set-production', 'build', 'uglify', 'minify'])
   gulp.task('build', ['scripts', 'styles'])
   gulp.task('default', ['watch'])
 }
