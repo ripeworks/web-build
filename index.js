@@ -33,7 +33,9 @@ var defaults = {
     scripts: 'js',
     styles: 'css'
   },
-  browserify: {}
+  browserify: {},
+  uglify: {},
+  minify: {},
 }
 
 var watch = false
@@ -99,13 +101,13 @@ module.exports = function(gulp, options) {
 
   gulp.task('uglify', ['scripts'], function(done) {
     gulp.src(path.join(config.paths.dest, config.paths.scripts, '**/*.js'))
-      .pipe(uglify())
+      .pipe(uglify(config.uglify))
       .pipe(gulp.dest(path.join(config.paths.dest, config.paths.scripts)))
   })
 
   gulp.task('minify', ['styles'], function(done) {
     gulp.src(path.join(config.paths.dest, config.paths.styles, '**/*.css'))
-      .pipe(minify())
+      .pipe(minify(config.minify))
       .pipe(gulp.dest(path.join(config.paths.dest, config.paths.styles)))
   })
 
@@ -164,7 +166,8 @@ module.exports = function(gulp, options) {
     }
   })
 
-  gulp.task('production', ['set-production', 'build', 'uglify', 'minify'])
   gulp.task('build', ['scripts', 'styles'])
+  gulp.task('dist', ['build', 'uglify', 'minify'])
+  gulp.task('production', ['set-production', 'dist'])
   gulp.task('default', ['watch'])
 }
