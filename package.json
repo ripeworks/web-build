@@ -2,7 +2,7 @@
   "author": "mike@ripeworks.com",
   "name": "web-build",
   "description": "Build tooling for web projects.",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "homepage": "http://ripeworks.com",
   "repository": {
     "type": "git",
