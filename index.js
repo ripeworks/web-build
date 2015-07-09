@@ -89,7 +89,7 @@ module.exports = function(gulp, options) {
   });
 
   gulp.task('styles', function() {
-    gulp.src(config.styles.src)
+    return gulp.src(config.styles.src)
       .pipe(sourcemaps.init())
       .pipe(stylus({
         'include css': true,
@@ -101,7 +101,7 @@ module.exports = function(gulp, options) {
   })
 
   gulp.task('uglify', ['scripts'], function(done) {
-    gulp.src(path.join(config.paths.dest, config.paths.scripts, '**/*.js'))
+    return gulp.src(path.join(config.paths.dest, config.paths.scripts, '**/*.js'))
       .pipe(uglify(config.uglify))
       .pipe(gulp.dest(path.join(config.paths.dest, config.paths.scripts)))
   })
@@ -110,7 +110,7 @@ module.exports = function(gulp, options) {
     var minify = map(function(buff, filename) {
       return new CleanCSS(config.minify).minify(buff.toString()).styles
     })
-    gulp.src(path.join(config.paths.dest, config.paths.styles, '**/*.css'))
+    return gulp.src(path.join(config.paths.dest, config.paths.styles, '**/*.css'))
       .pipe(minify)
       .pipe(gulp.dest(path.join(config.paths.dest, config.paths.styles)))
   })
