@@ -3,12 +3,13 @@
 var watchify    = require("watchify")
 var browserify  = require("browserify")
 var source      = require("vinyl-source-stream")
+var map         = require("vinyl-map")
 var browserSync = require("browser-sync")
 var gutil       = require("gulp-util")
 var nodemon     = require("gulp-nodemon")
 var rename      = require("gulp-rename")
 var uglify      = require("gulp-uglify")
-var minify      = require("gulp-minify-css")
+var CleanCSS    = require("clean-css")
 var sourcemaps  = require("gulp-sourcemaps")
 var reload      = browserSync.reload
 var path        = require("path")
@@ -106,8 +107,11 @@ module.exports = function(gulp, options) {
   })
 
   gulp.task('minify', ['styles'], function(done) {
+    var minify = map(function(buff, filename) {
+      return new CleanCSS(config.minify).minify(buff.toString()).styles
+    })
     gulp.src(path.join(config.paths.dest, config.paths.styles, '**/*.css'))
-      .pipe(minify(config.minify))
+      .pipe(minify)
       .pipe(gulp.dest(path.join(config.paths.dest, config.paths.styles)))
   })
 
