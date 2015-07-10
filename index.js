@@ -3,19 +3,18 @@
 var watchify    = require("watchify")
 var browserify  = require("browserify")
 var source      = require("vinyl-source-stream")
-var map         = require("vinyl-map")
-var browserSync = require("browser-sync")
+var browserSync = require("browser-sync").create()
 var gutil       = require("gulp-util")
 var nodemon     = require("gulp-nodemon")
 var rename      = require("gulp-rename")
 var uglify      = require("gulp-uglify")
-var CleanCSS    = require("clean-css")
+var minify      = require("gulp-minify-css")
 var sourcemaps  = require("gulp-sourcemaps")
-var reload      = browserSync.reload
 var path        = require("path")
 var assign      = require("object-assign")
 
 var coffeeify   = require("coffeeify")
+var babelify    = require("babelify")
 var stylus      = require("gulp-stylus")
 var nib         = require("nib")
 
@@ -37,6 +36,8 @@ var defaults = {
   browserify: {},
   uglify: {},
   minify: {},
+  babelify: {},
+  coffee: false,
 }
 
 var watch = false
@@ -62,27 +63,33 @@ module.exports = function(gulp, options) {
     }
 
     var handleError = function(err) {
-      gutil.log("Browserify Error:", err.message)
+      gutil.log(err.message)
+      browserSync.notify("Browserify Error!")
       this.emit('end')
     }
 
     var bundle = function(script) {
       var b = browserify(script, browserifyConfig)
       if (watch) b = watchify(b)
+
       var rebundle = function() {
-        b.bundle()
+        return b.bundle()
           .on('error', handleError)
           .pipe(source(path.basename(script)))
           .pipe(rename({extname: ".js"}))
           .pipe(gulp.dest(path.join(config.paths.dest, config.paths.scripts)))
           .on('end', handleComplete)
-          .pipe(reload({stream: true}))
+          .pipe(browserSync.stream({once: true}))
       }
 
-      config.onBundle && config.onBundle(b)
+      if (config.coffee) {
+        b.transform(coffeeify)
+      } else {
+        b.transform(babelify.configure(config.babel))
+      }
       b.on('update', rebundle)
-      b.transform(coffeeify)
-      rebundle()
+      config.onBundle && config.onBundle(b)
+      return rebundle()
     }
 
     config.scripts.forEach(bundle)
@@ -97,7 +104,7 @@ module.exports = function(gulp, options) {
       }))
       .pipe(sourcemaps.write())
       .pipe(gulp.dest(path.join(config.paths.dest, config.paths.styles)))
-      .pipe(reload({stream: true}))
+      .pipe(browserSync.stream({once: true}))
   })
 
   gulp.task('uglify', ['scripts'], function(done) {
@@ -107,11 +114,8 @@ module.exports = function(gulp, options) {
   })
 
   gulp.task('minify', ['styles'], function(done) {
-    var minify = map(function(buff, filename) {
-      return new CleanCSS(config.minify).minify(buff.toString()).styles
-    })
     return gulp.src(path.join(config.paths.dest, config.paths.styles, '**/*.css'))
-      .pipe(minify)
+      .pipe(minify(config.minify))
       .pipe(gulp.dest(path.join(config.paths.dest, config.paths.styles)))
   })
 
@@ -148,7 +152,7 @@ module.exports = function(gulp, options) {
   })
 
   gulp.task('browser-sync', ['build'], function() {
-    browserSync({
+    browserSync.init({
       open: false,
       port: config.port,
       server: {
